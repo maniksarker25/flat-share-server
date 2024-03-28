@@ -6,11 +6,10 @@ import { userService } from "./user.service";
 const registerUser = catchAsync(async (req, res) => {
   const result = await userService.registerUserIntoDB(req.body);
   sendResponse(res, {
-    statusCode: httpStatus.OK,
+    statusCode: httpStatus.CREATED,
     success: true,
-    message: "Admin retrieved successfully",
-    // meta: result?.meta,
-    // data: result?.data,
+    message: "User created successfully",
+
     data: result,
   });
 });
