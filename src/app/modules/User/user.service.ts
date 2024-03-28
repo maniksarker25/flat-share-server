@@ -1,6 +1,9 @@
 import bcrypt from "bcrypt";
 import prisma from "../../utils/prisma";
 import { User, UserProfile } from "@prisma/client";
+import { TLoginUser } from "./user.interface";
+import config from "../../config";
+import { jwtHelper } from "../../helpers/jwtHelper";
 const registerUserIntoDB = async (payload: User & UserProfile) => {
   const hashedPassword = await bcrypt.hash(payload.password, 12);
 
@@ -35,6 +38,45 @@ const registerUserIntoDB = async (payload: User & UserProfile) => {
   return result;
 };
 
+// login user into db
+const loginUserIntoDB = async (payload: TLoginUser) => {
+  const user = await prisma.user.findUniqueOrThrow({
+    where: {
+      email: payload.email,
+    },
+  });
+
+  const isPasswordMatched = await bcrypt.compare(
+    payload?.password,
+    user?.password
+  );
+
+  if (!isPasswordMatched) {
+    throw new Error("Password does not matched");
+  }
+
+  const jwtPayload = {
+    name: user?.name,
+    email: user?.email,
+  };
+  const accessToken = jwtHelper.generateToken(
+    jwtPayload,
+    config.jwt_access_secret as string,
+    config.jwt_access_expires_in as string
+  );
+  const refreshToken = jwtHelper.generateToken(
+    jwtPayload,
+    config.jwt_refresh_secret as string,
+    config.jwt_refresh_expires_in as string
+  );
+
+  return {
+    accessToken,
+    refreshToken,
+  };
+};
+
 export const userService = {
   registerUserIntoDB,
+  loginUserIntoDB,
 };
