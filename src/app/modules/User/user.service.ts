@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import prisma from "../../utils/prisma";
-const registerUserIntoDB = async (payload: any) => {
+import { User, UserProfile } from "@prisma/client";
+const registerUserIntoDB = async (payload: User & UserProfile) => {
   const hashedPassword = await bcrypt.hash(payload.password, 12);
 
   // make user data
@@ -18,10 +19,16 @@ const registerUserIntoDB = async (payload: any) => {
   const result = await prisma.$transaction(async (transactionClient) => {
     const createdUserData = await transactionClient.user.create({
       data: userData,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        createdAt: true,
+        updatedAt: true,
+      },
     });
-    userProfileData.userId = createdUserData.id;
     const createdProfileData = await transactionClient.userProfile.create({
-      data: userProfileData,
+      data: { userId: createdUserData?.id, ...userProfileData },
     });
     return createdUserData;
   });
