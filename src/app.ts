@@ -1,5 +1,6 @@
 import express, { Application, Request, Response, urlencoded } from "express";
 import cors from "cors";
+import router from "./app/routes";
 
 const app: Application = express();
 app.use(cors());
@@ -11,6 +12,7 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Flat share is available");
 });
 
+app.use("/api", router);
 // app.use(globalErrorHandler);
 // app.use(notFound);
 
