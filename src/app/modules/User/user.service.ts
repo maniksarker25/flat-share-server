@@ -9,12 +9,19 @@ const registerUserIntoDB = async (payload: any) => {
     email: payload.email,
     password: hashedPassword,
   };
+  // make userProfile data
+  const userProfileData = {
+    bio: payload.bio,
+    profession: payload.profession,
+    address: payload.address,
+  };
   const result = await prisma.$transaction(async (transactionClient) => {
     const createdUserData = await transactionClient.user.create({
       data: userData,
     });
+    userProfileData.userId = createdUserData.id;
     const createdProfileData = await transactionClient.userProfile.create({
-      data: payload,
+      data: userProfileData,
     });
     return createdUserData;
   });

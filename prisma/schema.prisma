@@ -13,31 +13,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
-  id String @id @unique @default(uuid())
-  name String 
-  email String @unique
-  password String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user UserProfile?
+  id          String       @id @default(uuid())
+  name        String
+  email       String       @unique
+  password    String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  userProfile UserProfile?
 
   @@map("users")
 }
 
 model UserProfile {
-  id String @id @unique @default(uuid())
-  userId User @relation(fields: [id],references: [id])
-  bio String
+  id         String   @id @default(uuid())
+  userId     String   @unique
+  bio        String
   profession String
-  address String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  address    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id])
 
   @@map("userProfiles")
 }
-
-
-
-
