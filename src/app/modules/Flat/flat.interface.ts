@@ -1,4 +1,4 @@
 export type TFlatFilterableFields = {
   searchTerm?: string;
-  availability: boolean;
+  availability?: boolean;
 };
