@@ -25,7 +25,23 @@ const getBookingRequests = catchAsync(async (req, res) => {
   });
 });
 
+// update booking request status
+const updateBookingFlatApplicationStatus = catchAsync(async (req, res) => {
+  const bookingId = req.params.bookingId;
+  const result = await bookingService.updateBookingFlatApplicationStatusIntoDB(
+    bookingId,
+    req.body
+  );
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Booking request updated successfully",
+    data: result,
+  });
+});
+
 export const bookingController = {
   createBooking,
   getBookingRequests,
+  updateBookingFlatApplicationStatus,
 };

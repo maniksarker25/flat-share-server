@@ -6,6 +6,13 @@ const createBookingValidationSchema = z.object({
   }),
 });
 
+const updateBookingFlatApplicationStatusSchema = z.object({
+  body: z.object({
+    status: z.string({ required_error: "status is required" }),
+  }),
+});
+
 export const bookingValidation = {
   createBookingValidationSchema,
+  updateBookingFlatApplicationStatusSchema,
 };

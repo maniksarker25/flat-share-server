@@ -58,18 +58,18 @@ model Flat {
 }
 
 model Booking {
-  id        String     @id @unique @default(uuid())
+  id        String        @id @unique @default(uuid())
   flatId    String
   userId    String
-  status    FlatStatus @default(PENDING)
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  status    BookingStatus @default(PENDING)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
 
   flat Flat @relation(fields: [flatId], references: [id])
   user User @relation(fields: [userId], references: [id])
 }
 
-enum FlatStatus {
+enum BookingStatus {
   PENDING
   BOOKED
   REJECTED
