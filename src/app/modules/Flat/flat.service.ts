@@ -20,7 +20,7 @@ const getFlatsFromDB = async (
   options: TPaginationOptions
 ) => {
   // destructure limit and skip
-  const { limit, skip } = calculatePagination(options);
+  const { page, limit, skip } = calculatePagination(options);
   const { searchTerm, ...filterData } = query;
   console.log(searchTerm);
   // make a default and condition-------
@@ -63,7 +63,17 @@ const getFlatsFromDB = async (
             createdAt: "desc",
           },
   });
-  return result;
+  const total = await prisma.flat.count({
+    where: whereConditions,
+  });
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+    },
+    data: result,
+  };
 };
 
 // update flat into db
