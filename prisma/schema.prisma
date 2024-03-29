@@ -14,7 +14,7 @@ datasource db {
 }
 
 model User {
-  id          String       @id @default(uuid())
+  id          String       @id @unique @default(uuid())
   name        String
   email       String       @unique
   password    String
@@ -26,7 +26,7 @@ model User {
 }
 
 model UserProfile {
-  id         String   @id @default(uuid())
+  id         String   @id @unique @default(uuid())
   userId     String   @unique
   bio        String
   profession String
@@ -36,4 +36,21 @@ model UserProfile {
   user       User     @relation(fields: [userId], references: [id])
 
   @@map("userProfiles")
+}
+
+model Flat {
+  id                   String   @id @unique @default(uuid())
+  squareFeet           Int
+  totalBedrooms        Int
+  totalRooms           Int
+  utilitiesDescription String
+  location             String
+  description          String
+  rent                 Int
+  availability         Boolean
+  advanceAmount        Int
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@map("flats")
 }
