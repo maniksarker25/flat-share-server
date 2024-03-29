@@ -70,7 +70,19 @@ const loginUserIntoDB = async (payload: TLoginUser) => {
   };
 };
 
+//get user profile
+const getUserProfileFromDB = async (userId: string) => {
+  const result = await prisma.userProfile.findUnique({
+    where: {
+      userId,
+    },
+  });
+
+  return result;
+};
+
 export const userService = {
   registerUserIntoDB,
   loginUserIntoDB,
+  getUserProfileFromDB,
 };
