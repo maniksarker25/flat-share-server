@@ -29,9 +29,21 @@ const getUserProfile = catchAsync(async (req, res) => {
   const userId = req.user?.id;
   const result = await userService.getUserProfileFromDB(userId);
   sendResponse(res, {
-    statusCode: httpStatus.CREATED,
+    statusCode: httpStatus.OK,
     success: true,
     message: "User profile retrieved successfully",
+    data: result,
+  });
+});
+
+/// update user profile into db
+const updateUserProfileIntoDB = catchAsync(async (req, res) => {
+  const userId = req.user?.id;
+  const result = await userService.updateUserProfileIntoDB(userId, req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User profile updated successfully",
     data: result,
   });
 });
@@ -40,4 +52,5 @@ export const userController = {
   registerUser,
   loginUser,
   getUserProfile,
+  updateUserProfileIntoDB,
 };
