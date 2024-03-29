@@ -64,15 +64,9 @@ const loginUserIntoDB = async (payload: TLoginUser) => {
     config.jwt_access_secret as string,
     config.jwt_access_expires_in as string
   );
-  const refreshToken = jwtHelper.generateToken(
-    jwtPayload,
-    config.jwt_refresh_secret as string,
-    config.jwt_refresh_expires_in as string
-  );
 
   return {
     accessToken,
-    refreshToken,
   };
 };
 
