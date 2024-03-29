@@ -13,7 +13,6 @@ const auth = () => {
     if (!token) {
       throw new AppError(httpStatus.UNAUTHORIZED, "Unauthorized Access");
     }
-    console.log(token);
     let decoded;
 
     try {

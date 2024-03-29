@@ -56,7 +56,7 @@ const loginUserIntoDB = async (payload: TLoginUser) => {
   }
 
   const jwtPayload = {
-    name: user?.name,
+    id: user.id,
     email: user?.email,
   };
   const accessToken = jwtHelper.generateToken(
