@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import httpStatus from "http-status";
 import { ZodError } from "zod";
+import AppError from "../error/appError";
 
 const globalErrorHandler = (
   err: any,
@@ -27,6 +28,10 @@ const globalErrorHandler = (
         message: issue.message,
       })),
     };
+  } else if (err instanceof AppError) {
+    statusCode = err.statusCode;
+    message = err.message;
+    errorDetails = err;
   }
 
   res.status(httpStatus.INTERNAL_SERVER_ERROR).json({

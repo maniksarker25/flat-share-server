@@ -1,8 +1,17 @@
 import express from "express";
 import { flatController } from "./flat.controller";
 
+import validateRequest from "../../middlewares/validateRequest";
+import { flatValidation } from "./flat.validation";
+import auth from "../../middlewares/auth";
+
 const router = express.Router();
 
-router.post("/flats", flatController.createFlat);
+router.post(
+  "/flats",
+  auth(),
+  validateRequest(flatValidation.createFlatValidationSchema),
+  flatController.createFlat
+);
 
 export const flatRoutes = router;

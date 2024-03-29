@@ -47,7 +47,7 @@ model Flat {
   location             String
   description          String
   rent                 Int
-  availability         Boolean
+  availability         Boolean  @default(true)
   advanceAmount        Int
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
