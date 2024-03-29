@@ -12,5 +12,5 @@ router.post(
   validateRequest(bookingValidation.createBookingValidationSchema),
   bookingController.createBooking
 );
-
+router.get("/booking-requests", auth(), bookingController.getBookingRequests);
 export const bookingRoutes = router;

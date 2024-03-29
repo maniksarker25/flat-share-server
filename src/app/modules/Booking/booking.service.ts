@@ -31,7 +31,12 @@ const createBookingIntoDB = async (userId: string, payload: Booking) => {
 
   return result;
 };
-
+// get booking requests from db
+const getBookingRequestsFromDB = async () => {
+  const result = await prisma.booking.findMany();
+  return result;
+};
 export const bookingService = {
   createBookingIntoDB,
+  getBookingRequestsFromDB,
 };
