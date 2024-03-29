@@ -15,5 +15,11 @@ router.post(
 );
 
 router.get("/flats", auth(), flatController.getFlats);
+router.put(
+  "/flats/:flatId",
+  auth(),
+  validateRequest(flatValidation.updateFlatValidationSchema),
+  flatController.updateFlat
+);
 
 export const flatRoutes = router;

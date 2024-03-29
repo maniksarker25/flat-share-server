@@ -4,6 +4,8 @@ import { TPaginationOptions } from "../../interface/pagination.interface";
 import { TFlatFilterableFields } from "./flat.interface";
 import { calculatePagination } from "../../helpers/paginatonHelper";
 import { flatSearchableFields } from "./flat.constant";
+import AppError from "../../error/appError";
+import httpStatus from "http-status";
 
 const createFlatIntoDB = async (payload: Flat) => {
   const result = await prisma.flat.create({
@@ -47,7 +49,7 @@ const getFlatsFromDB = async (
     });
   }
   const whereConditions: Prisma.FlatWhereInput = { AND: andConditions };
-  console.dir(whereConditions, { depth: "infinity" });
+  // console.dir(whereConditions, { depth: "infinity" });
   const result = await prisma.flat.findMany({
     where: whereConditions,
     skip,
@@ -64,7 +66,27 @@ const getFlatsFromDB = async (
   return result;
 };
 
+// update flat into db
+const updateFlatIntoDB = async (flatId: string, payload: Partial<Flat>) => {
+  const flat = await prisma.flat.findUnique({
+    where: {
+      id: flatId,
+    },
+  });
+  if (!flat) {
+    throw new AppError(httpStatus.NOT_FOUND, "Flat not found");
+  }
+  const result = await prisma.flat.update({
+    where: {
+      id: flatId,
+    },
+    data: payload,
+  });
+
+  return result;
+};
 export const flatService = {
   createFlatIntoDB,
   getFlatsFromDB,
+  updateFlatIntoDB,
 };

@@ -29,7 +29,20 @@ const getFlats = catchAsync(async (req, res) => {
   });
 });
 
+// update flat
+const updateFlat = catchAsync(async (req, res) => {
+  const flatId = req.params.flatId;
+  const result = await flatService.updateFlatIntoDB(flatId, req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Flat information updated successfully",
+    data: result,
+  });
+});
+
 export const flatController = {
   createFlat,
   getFlats,
+  updateFlat,
 };
