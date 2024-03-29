@@ -6,6 +6,7 @@ import { calculatePagination } from "../../helpers/paginatonHelper";
 import { flatSearchableFields } from "./flat.constant";
 import AppError from "../../error/appError";
 import httpStatus from "http-status";
+import convertStringParamsToBoolean from "../../helpers/convertSrtingToBoolean";
 
 const createFlatIntoDB = async (payload: Flat) => {
   const result = await prisma.flat.create({
@@ -20,8 +21,9 @@ const getFlatsFromDB = async (
   options: TPaginationOptions
 ) => {
   // destructure limit and skip
+  const convertStringToBoolean = convertStringParamsToBoolean(query);
   const { page, limit, skip } = calculatePagination(options);
-  const { searchTerm, ...filterData } = query;
+  const { searchTerm, ...filterData } = convertStringToBoolean;
   console.log(searchTerm);
   // make a default and condition-------
   const andConditions: Prisma.FlatWhereInput[] = [];
