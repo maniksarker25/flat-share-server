@@ -36,7 +36,33 @@ const loginUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void
         data: result,
     });
 }));
+// get user profile
+const getUserProfile = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+    const result = yield user_service_1.userService.getUserProfileFromDB(userId);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "User profile retrieved successfully",
+        data: result,
+    });
+}));
+/// update user profile into db
+const updateUserProfileIntoDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _b;
+    const userId = (_b = req.user) === null || _b === void 0 ? void 0 : _b.id;
+    const result = yield user_service_1.userService.updateUserProfileIntoDB(userId, req.body);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "User profile updated successfully",
+        data: result,
+    });
+}));
 exports.userController = {
     registerUser,
     loginUser,
+    getUserProfile,
+    updateUserProfileIntoDB,
 };

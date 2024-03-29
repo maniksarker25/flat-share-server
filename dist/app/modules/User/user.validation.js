@@ -30,6 +30,18 @@ const createUserValidationSchema = zod_1.z.object({
         }),
     }),
 });
+const updateUserProfileValidationSchema = zod_1.z.object({
+    body: zod_1.z.object({
+        bio: zod_1.z.string({ invalid_type_error: "Bio must be a string" }).optional(),
+        profession: zod_1.z
+            .string({ invalid_type_error: "Profession must be a string" })
+            .optional(),
+        address: zod_1.z
+            .string({ invalid_type_error: "Address must be a string" })
+            .optional(),
+    }),
+});
 exports.userValidation = {
     createUserValidationSchema,
+    updateUserProfileValidationSchema,
 };

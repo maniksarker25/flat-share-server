@@ -17,6 +17,8 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const prisma_1 = __importDefault(require("../../utils/prisma"));
 const config_1 = __importDefault(require("../../config"));
 const jwtHelper_1 = require("../../helpers/jwtHelper");
+const appError_1 = __importDefault(require("../../error/appError"));
+const http_status_1 = __importDefault(require("http-status"));
 const registerUserIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const hashedPassword = yield bcrypt_1.default.hash(payload.password, 12);
     // make user data
@@ -51,14 +53,17 @@ const registerUserIntoDB = (payload) => __awaiter(void 0, void 0, void 0, functi
 });
 // login user into db
 const loginUserIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield prisma_1.default.user.findUniqueOrThrow({
+    const user = yield prisma_1.default.user.findUnique({
         where: {
             email: payload.email,
         },
     });
+    if (!user) {
+        throw new appError_1.default(http_status_1.default.NOT_FOUND, "User not found");
+    }
     const isPasswordMatched = yield bcrypt_1.default.compare(payload === null || payload === void 0 ? void 0 : payload.password, user === null || user === void 0 ? void 0 : user.password);
     if (!isPasswordMatched) {
-        throw new Error("Password does not matched");
+        throw new appError_1.default(http_status_1.default.FORBIDDEN, "Password does not matched");
     }
     const jwtPayload = {
         id: user.id,
@@ -69,7 +74,28 @@ const loginUserIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function*
         accessToken,
     };
 });
+//get user profile
+const getUserProfileFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma_1.default.userProfile.findUnique({
+        where: {
+            userId,
+        },
+    });
+    return result;
+});
+// update user profile
+const updateUserProfileIntoDB = (userId, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma_1.default.userProfile.update({
+        where: {
+            userId,
+        },
+        data: payload,
+    });
+    return result;
+});
 exports.userService = {
     registerUserIntoDB,
     loginUserIntoDB,
+    getUserProfileFromDB,
+    updateUserProfileIntoDB,
 };

@@ -4,6 +4,8 @@ import { User, UserProfile } from "@prisma/client";
 import { TLoginUser } from "./user.interface";
 import config from "../../config";
 import { jwtHelper } from "../../helpers/jwtHelper";
+import AppError from "../../error/appError";
+import httpStatus from "http-status";
 const registerUserIntoDB = async (payload: User & UserProfile) => {
   const hashedPassword = await bcrypt.hash(payload.password, 12);
 
@@ -40,11 +42,14 @@ const registerUserIntoDB = async (payload: User & UserProfile) => {
 
 // login user into db
 const loginUserIntoDB = async (payload: TLoginUser) => {
-  const user = await prisma.user.findUniqueOrThrow({
+  const user = await prisma.user.findUnique({
     where: {
       email: payload.email,
     },
   });
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  }
 
   const isPasswordMatched = await bcrypt.compare(
     payload?.password,
@@ -52,7 +57,7 @@ const loginUserIntoDB = async (payload: TLoginUser) => {
   );
 
   if (!isPasswordMatched) {
-    throw new Error("Password does not matched");
+    throw new AppError(httpStatus.FORBIDDEN, "Password does not matched");
   }
 
   const jwtPayload = {
