@@ -29,6 +29,7 @@ const paginatonHelper_1 = require("../../helpers/paginatonHelper");
 const flat_constant_1 = require("./flat.constant");
 const appError_1 = __importDefault(require("../../error/appError"));
 const http_status_1 = __importDefault(require("http-status"));
+const convertSrtingToBoolean_1 = __importDefault(require("../../helpers/convertSrtingToBoolean"));
 const createFlatIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.flat.create({
         data: payload,
@@ -38,8 +39,9 @@ const createFlatIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function
 const getFlatsFromDB = (query, options) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     // destructure limit and skip
+    const convertStringToBoolean = (0, convertSrtingToBoolean_1.default)(query);
     const { page, limit, skip } = (0, paginatonHelper_1.calculatePagination)(options);
-    const { searchTerm } = query, filterData = __rest(query, ["searchTerm"]);
+    const { searchTerm } = convertStringToBoolean, filterData = __rest(convertStringToBoolean, ["searchTerm"]);
     console.log(searchTerm);
     // make a default and condition-------
     const andConditions = [];
