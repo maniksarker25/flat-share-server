@@ -71,7 +71,10 @@ const loginUserIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function*
     };
     const accessToken = jwtHelper_1.jwtHelper.generateToken(jwtPayload, config_1.default.jwt_access_secret, config_1.default.jwt_access_expires_in);
     return {
-        accessToken,
+        id: user === null || user === void 0 ? void 0 : user.id,
+        name: user === null || user === void 0 ? void 0 : user.name,
+        email: user === null || user === void 0 ? void 0 : user.email,
+        token: accessToken,
     };
 });
 //get user profile

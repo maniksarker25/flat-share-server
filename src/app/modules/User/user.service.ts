@@ -71,7 +71,10 @@ const loginUserIntoDB = async (payload: TLoginUser) => {
   );
 
   return {
-    accessToken,
+    id: user?.id,
+    name: user?.name,
+    email: user?.email,
+    token: accessToken,
   };
 };
 
