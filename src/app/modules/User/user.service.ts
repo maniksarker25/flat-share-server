@@ -7,6 +7,7 @@ import { jwtHelper } from "../../helpers/jwtHelper";
 import AppError from "../../error/appError";
 import httpStatus from "http-status";
 const registerUserIntoDB = async (payload: User) => {
+  console.log("payload", payload);
   const hashedPassword = await bcrypt.hash(payload.password, 12);
 
   // make user data
@@ -37,6 +38,8 @@ const registerUserIntoDB = async (payload: User) => {
   //   });
   //   return createdUserData;
   // });
+
+  payload.password = hashedPassword;
 
   const result = await prisma.user.create({
     data: payload,

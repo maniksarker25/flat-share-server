@@ -17,7 +17,7 @@ router.get("/profile", auth(), userController.getUserProfile);
 router.put(
   "/profile",
   auth(),
-  validateRequest(userValidation.updateUserProfileValidationSchema),
+  // validateRequest(userValidation.updateUserProfileValidationSchema),
   userController.updateUserProfileIntoDB
 );
 
