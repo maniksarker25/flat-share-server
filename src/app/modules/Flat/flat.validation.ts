@@ -58,9 +58,9 @@ const updateFlatValidationSchema = z.object({
         invalid_type_error: "Total rooms must be a number",
       })
       .optional(),
-    utilitiesDescription: z
+    detailedDescription: z
       .string({
-        invalid_type_error: "Utilities description must be a string",
+        invalid_type_error: "Detailed description must be a string",
       })
       .optional(),
     location: z
@@ -68,22 +68,28 @@ const updateFlatValidationSchema = z.object({
         invalid_type_error: "Location must be a string",
       })
       .optional(),
-    description: z
+    amenities: z
       .string({
-        invalid_type_error: "Description must be a string",
+        invalid_type_error: "Amenities must be a string",
       })
       .optional(),
-    rent: z
+    rentAmount: z
       .number({
         invalid_type_error: "Rent amount must be a number",
       })
       .optional(),
-    advanceAmount: z
+    advancedAmount: z
       .number({
-        invalid_type_error: "Advance amount must be a number",
+        invalid_type_error: "Advanced amount must be a number",
       })
       .optional(),
-    availability: z.boolean().optional(),
+    photos: z
+      .array(
+        z.string({
+          invalid_type_error: "Each photo must be a string",
+        })
+      )
+      .optional(),
   }),
 });
 
