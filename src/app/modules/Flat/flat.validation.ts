@@ -33,10 +33,12 @@ const createFlatValidationSchema = z.object({
       required_error: "Advanced amount is required ",
       invalid_type_error: "Advanced amount must be a number",
     }),
-    photo: z.string({
-      required_error: "Photo is required",
-      invalid_type_error: "Photo must be a string",
-    }),
+    photos: z.array(
+      z.string({
+        required_error: "Each photo is required",
+        invalid_type_error: "Each photo must be a string",
+      })
+    ),
   }),
 });
 const updateFlatValidationSchema = z.object({
