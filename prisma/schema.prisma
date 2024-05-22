@@ -42,19 +42,19 @@ model UserProfile {
 }
 
 model Flat {
-  id                   String    @id @unique @default(uuid())
-  squareFeet           Int
-  totalBedrooms        Int
-  totalRooms           Int
-  utilitiesDescription String
-  location             String
-  description          String
-  rent                 Int
-  availability         Boolean   @default(true)
-  advanceAmount        Int
-  createdAt            DateTime  @default(now())
-  updatedAt            DateTime  @updatedAt
-  booking              Booking[]
+  id                  String    @id @unique @default(uuid())
+  squareFeet          Int
+  totalBedrooms       Int
+  totalRooms          Int
+  detailedDescription String
+  amenities           String
+  location            String
+  rentAmount          Int
+  advancedAmount      Int
+  photo               String
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  booking             Booking[]
 
   @@map("flats")
 }
