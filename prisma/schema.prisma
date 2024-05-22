@@ -17,6 +17,8 @@ model User {
   id          String       @id @unique @default(uuid())
   name        String
   email       String       @unique
+  status      UserStatus   @default(ACTIVE)
+  role        UserRole     @default(USER)
   password    String
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
@@ -73,4 +75,14 @@ enum BookingStatus {
   PENDING
   BOOKED
   REJECTED
+}
+
+enum UserStatus {
+  ACTIVE
+  DEACTIVATE
+}
+
+enum UserRole {
+  USER
+  ADMIN
 }

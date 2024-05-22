@@ -6,36 +6,40 @@ import config from "../../config";
 import { jwtHelper } from "../../helpers/jwtHelper";
 import AppError from "../../error/appError";
 import httpStatus from "http-status";
-const registerUserIntoDB = async (payload: User & UserProfile) => {
+const registerUserIntoDB = async (payload: User) => {
   const hashedPassword = await bcrypt.hash(payload.password, 12);
 
   // make user data
-  const userData = {
-    name: payload.name,
-    email: payload.email,
-    password: hashedPassword,
-  };
+  // const userData = {
+  //   name: payload.name,
+  //   email: payload.email,
+  //   password: hashedPassword,
+  // };
   // make userProfile data
-  const userProfileData = {
-    bio: payload.bio,
-    profession: payload.profession,
-    address: payload.address,
-  };
-  const result = await prisma.$transaction(async (transactionClient) => {
-    const createdUserData = await transactionClient.user.create({
-      data: userData,
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-    });
-    const createdProfileData = await transactionClient.userProfile.create({
-      data: { userId: createdUserData?.id, ...userProfileData },
-    });
-    return createdUserData;
+  // const userProfileData = {
+  //   bio: payload.bio,
+  //   profession: payload.profession,
+  //   address: payload.address,
+  // };
+  // const result = await prisma.$transaction(async (transactionClient) => {
+  //   const createdUserData = await transactionClient.user.create({
+  //     data: userData,
+  //     select: {
+  //       id: true,
+  //       name: true,
+  //       email: true,
+  //       createdAt: true,
+  //       updatedAt: true,
+  //     },
+  //   });
+  //   const createdProfileData = await transactionClient.userProfile.create({
+  //     data: { userId: createdUserData?.id, ...userProfileData },
+  //   });
+  //   return createdUserData;
+  // });
+
+  const result = await prisma.user.create({
+    data: payload,
   });
   return result;
 };
