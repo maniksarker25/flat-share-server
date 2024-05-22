@@ -97,8 +97,27 @@ const updateFlatIntoDB = async (flatId: string, payload: Partial<Flat>) => {
 
   return result;
 };
+
+const deleteFlatFromDB = async (id: string) => {
+  const flat = await prisma.flat.findUnique({
+    where: {
+      id,
+    },
+  });
+  if (!flat) {
+    throw new AppError(httpStatus.NOT_FOUND, "Flat not found");
+  }
+  const result = await prisma.flat.delete({
+    where: {
+      id,
+    },
+  });
+  return result;
+};
+
 export const flatService = {
   createFlatIntoDB,
   getFlatsFromDB,
   updateFlatIntoDB,
+  deleteFlatFromDB,
 };
