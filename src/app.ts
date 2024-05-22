@@ -7,6 +7,7 @@ import notFound from "./app/middlewares/notFound";
 const app: Application = express();
 app.use(cors());
 // parser ----------------------------------------------------------------
+// make some changes
 app.use(express.json());
 app.use(urlencoded({ extended: true }));
 
