@@ -7,7 +7,7 @@ import httpStatus from "http-status";
 import AppError from "../error/appError";
 import { jwtHelper } from "../helpers/jwtHelper";
 
-const auth = () => {
+const auth = (...requiredRoles: string[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const token = req?.headers?.authorization;
     if (!token) {
@@ -26,7 +26,11 @@ const auth = () => {
     if (!decoded) {
       throw new AppError(httpStatus.UNAUTHORIZED, "Unauthorized Access");
     }
+    const { role } = decoded;
 
+    if (requiredRoles && !requiredRoles.includes(role)) {
+      throw new AppError(httpStatus.UNAUTHORIZED, "You are unauthorized");
+    }
     req.user = decoded as JwtPayload;
     next();
   });
