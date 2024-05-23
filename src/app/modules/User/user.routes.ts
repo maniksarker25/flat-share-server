@@ -22,5 +22,10 @@ router.put(
   // validateRequest(userValidation.updateUserProfileValidationSchema),
   userController.updateUserProfileIntoDB
 );
+router.patch(
+  "/change-status/:userId",
+  auth(UserRole.ADMIN),
+  userController.changeUserStatus
+);
 
 export const userRoutes = router;

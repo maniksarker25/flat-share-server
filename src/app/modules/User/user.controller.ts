@@ -59,10 +59,25 @@ const getAllUser = catchAsync(async (req, res) => {
   });
 });
 
+// change user status
+const changeUserStatus = catchAsync(async (req, res) => {
+  const { userId } = req?.params;
+  const { status } = req.body;
+  const result = await userService.changeUserStatusIntoDB(userId, status);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Users status update  successfully",
+    data: result,
+  });
+});
+
 export const userController = {
   registerUser,
   loginUser,
+  getAllUser,
   getUserProfile,
   updateUserProfileIntoDB,
-  getAllUser,
+
+  changeUserStatus,
 };
