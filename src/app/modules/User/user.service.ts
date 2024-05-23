@@ -60,6 +60,7 @@ const loginUserIntoDB = async (payload: TLoginUser) => {
   const user = await prisma.user.findUnique({
     where: {
       email: payload.email,
+      status: UserStatus.ACTIVE,
     },
   });
   if (!user) {
