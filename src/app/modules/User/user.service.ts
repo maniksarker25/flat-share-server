@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import prisma from "../../utils/prisma";
-import { User, UserProfile, UserStatus } from "@prisma/client";
+import { User, UserProfile, UserRole, UserStatus } from "@prisma/client";
 import { TLoginUser } from "./user.interface";
 import config from "../../config";
 import { jwtHelper } from "../../helpers/jwtHelper";
@@ -143,6 +143,26 @@ const changeUserStatusIntoDB = async (userId: string, status: UserStatus) => {
   });
   return result;
 };
+// change user role
+const changeUserRoleIntoDB = async (userId: string, role: UserRole) => {
+  const userInfo = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+  if (!userInfo) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  }
+  const result = await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      role: role,
+    },
+  });
+  return result;
+};
 
 export const userService = {
   registerUserIntoDB,
@@ -151,4 +171,5 @@ export const userService = {
   getUserProfileFromDB,
   updateUserProfileIntoDB,
   changeUserStatusIntoDB,
+  changeUserRoleIntoDB,
 };

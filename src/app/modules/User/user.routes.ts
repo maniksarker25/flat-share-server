@@ -27,5 +27,10 @@ router.patch(
   auth(UserRole.ADMIN),
   userController.changeUserStatus
 );
+router.patch(
+  "/change-role/:userId",
+  auth(UserRole.ADMIN),
+  userController.changeUserRole
+);
 
 export const userRoutes = router;
