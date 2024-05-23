@@ -78,6 +78,19 @@ const getFlatsFromDB = async (
   };
 };
 
+// get single flat
+const getSingleFlatFromDB = async (flatId: string) => {
+  const flat = await prisma.flat.findUnique({
+    where: {
+      id: flatId,
+    },
+  });
+  if (!flat) {
+    throw new AppError(httpStatus.NOT_FOUND, "Flat not found");
+  }
+  return flat;
+};
+
 // update flat into db
 const updateFlatIntoDB = async (flatId: string, payload: Partial<Flat>) => {
   const flat = await prisma.flat.findUnique({
@@ -118,6 +131,7 @@ const deleteFlatFromDB = async (id: string) => {
 export const flatService = {
   createFlatIntoDB,
   getFlatsFromDB,
+  getSingleFlatFromDB,
   updateFlatIntoDB,
   deleteFlatFromDB,
 };

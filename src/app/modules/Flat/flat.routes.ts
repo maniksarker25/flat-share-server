@@ -14,7 +14,8 @@ router.post(
   flatController.createFlat
 );
 
-router.get("/flats", auth(), flatController.getFlats);
+router.get("/flats", flatController.getFlats);
+router.get("/flats/:flatId", flatController.getSingleFlat);
 router.put(
   "/flats/:flatId",
   auth(),

@@ -7,7 +7,15 @@ import { jwtHelper } from "../../helpers/jwtHelper";
 import AppError from "../../error/appError";
 import httpStatus from "http-status";
 const registerUserIntoDB = async (payload: User) => {
-  console.log("payload", payload);
+  const isUserExists = await prisma.user.findUnique({
+    where: {
+      email: payload.email,
+    },
+  });
+  if (isUserExists) {
+    throw new AppError(httpStatus.BAD_REQUEST, "This user already exists");
+  }
+
   const hashedPassword = await bcrypt.hash(payload.password, 12);
 
   // make user data
@@ -70,6 +78,7 @@ const loginUserIntoDB = async (payload: TLoginUser) => {
   const jwtPayload = {
     id: user.id,
     email: user?.email,
+    role: user?.role,
   };
   const accessToken = jwtHelper.generateToken(
     jwtPayload,
@@ -78,9 +87,6 @@ const loginUserIntoDB = async (payload: TLoginUser) => {
   );
 
   return {
-    id: user?.id,
-    name: user?.name,
-    email: user?.email,
     token: accessToken,
   };
 };
