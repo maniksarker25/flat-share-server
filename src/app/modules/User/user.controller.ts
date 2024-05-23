@@ -48,9 +48,21 @@ const updateUserProfileIntoDB = catchAsync(async (req, res) => {
   });
 });
 
+// get all user
+const getAllUser = catchAsync(async (req, res) => {
+  const result = await userService.getAllUserFromDB();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Users retrieved successfully",
+    data: result,
+  });
+});
+
 export const userController = {
   registerUser,
   loginUser,
   getUserProfile,
   updateUserProfileIntoDB,
+  getAllUser,
 };

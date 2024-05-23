@@ -117,9 +117,17 @@ const updateUserProfileIntoDB = async (
   return result;
 };
 
+// get all user from db
+const getAllUserFromDB = async () => {
+  const result = await prisma.user.findMany();
+  return result;
+};
+
 export const userService = {
   registerUserIntoDB,
   loginUserIntoDB,
   getUserProfileFromDB,
+
   updateUserProfileIntoDB,
+  getAllUserFromDB,
 };

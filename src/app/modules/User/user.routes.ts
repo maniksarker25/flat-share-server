@@ -13,6 +13,7 @@ router.post(
 );
 
 router.post("/login", userController.loginUser);
+router.get("/", userController.getAllUser);
 router.get("/profile", auth(), userController.getUserProfile);
 router.put(
   "/profile",
