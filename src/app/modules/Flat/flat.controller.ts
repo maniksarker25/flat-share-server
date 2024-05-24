@@ -54,6 +54,17 @@ const getSingleFlat = catchAsync(async (req, res) => {
     data: result,
   });
 });
+// get my flats
+const getMyFlats = catchAsync(async (req, res) => {
+  const userId = req?.user?.id;
+  const result = await flatService.getMyFlatsFromDB(userId);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Flat  retrieved successfully",
+    data: result,
+  });
+});
 // delete flat
 const deleteFlat = catchAsync(async (req, res) => {
   const flatId = req?.params?.id;
@@ -69,6 +80,7 @@ const deleteFlat = catchAsync(async (req, res) => {
 export const flatController = {
   createFlat,
   getFlats,
+  getMyFlats,
   getSingleFlat,
   updateFlat,
   deleteFlat,

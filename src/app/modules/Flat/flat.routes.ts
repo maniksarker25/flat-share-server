@@ -16,9 +16,10 @@ router.post(
 );
 
 router.get("/", flatController.getFlats);
+router.get("/my-flats", auth(UserRole.USER), flatController.getMyFlats);
 router.get("/:flatId", flatController.getSingleFlat);
 router.put(
-  "/flats/:flatId",
+  "/:flatId",
   auth(),
   validateRequest(flatValidation.updateFlatValidationSchema),
   flatController.updateFlat

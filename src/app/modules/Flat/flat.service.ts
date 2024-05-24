@@ -92,6 +92,16 @@ const getSingleFlatFromDB = async (flatId: string) => {
   return flat;
 };
 
+// get my flats
+const getMyFlatsFromDB = async (userId: string) => {
+  const result = await prisma.flat.findMany({
+    where: {
+      userId,
+    },
+  });
+  return result;
+};
+
 // update flat into db
 const updateFlatIntoDB = async (flatId: string, payload: Partial<Flat>) => {
   const flat = await prisma.flat.findUnique({
@@ -132,6 +142,7 @@ const deleteFlatFromDB = async (id: string) => {
 export const flatService = {
   createFlatIntoDB,
   getFlatsFromDB,
+  getMyFlatsFromDB,
   getSingleFlatFromDB,
   updateFlatIntoDB,
   deleteFlatFromDB,
