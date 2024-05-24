@@ -15,7 +15,11 @@ router.post(
 
 router.post("/login", userController.loginUser);
 router.get("/", auth(UserRole.ADMIN), userController.getAllUser);
-router.get("/profile", auth(), userController.getUserProfile);
+router.get(
+  "/profile",
+  auth(UserRole.ADMIN, UserRole.USER),
+  userController.getUserProfile
+);
 router.put(
   "/profile",
   auth(),

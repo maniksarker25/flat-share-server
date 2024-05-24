@@ -8,7 +8,8 @@ import AppError from "../../error/appError";
 import httpStatus from "http-status";
 import convertStringParamsToBoolean from "../../helpers/convertSrtingToBoolean";
 
-const createFlatIntoDB = async (payload: Flat) => {
+const createFlatIntoDB = async (userId: string, payload: Flat) => {
+  payload.userId = userId;
   const result = await prisma.flat.create({
     data: payload,
   });

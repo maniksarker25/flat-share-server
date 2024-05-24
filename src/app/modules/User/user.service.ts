@@ -94,9 +94,16 @@ const loginUserIntoDB = async (payload: TLoginUser) => {
 
 //get user profile
 const getUserProfileFromDB = async (userId: string) => {
-  const result = await prisma.userProfile.findUnique({
+  const result = await prisma.user.findUnique({
     where: {
-      userId,
+      id: userId,
+    },
+    select: {
+      id: true,
+      username: true,
+      email: true,
+      status: true,
+      role: true,
     },
   });
 
@@ -126,6 +133,8 @@ const getAllUserFromDB = async () => {
 
 // change user status
 const changeUserStatusIntoDB = async (userId: string, status: UserStatus) => {
+  console.log("userId", userId);
+  console.log("status", status);
   const userInfo = await prisma.user.findUnique({
     where: {
       id: userId,

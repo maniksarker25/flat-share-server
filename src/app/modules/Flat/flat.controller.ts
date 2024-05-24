@@ -6,7 +6,8 @@ import pick from "../../utils/pick";
 import { flatFilterableFields } from "./flat.constant";
 
 const createFlat = catchAsync(async (req, res) => {
-  const result = await flatService.createFlatIntoDB(req.body);
+  const userId = req?.user?.id;
+  const result = await flatService.createFlatIntoDB(userId, req.body);
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
     success: true,

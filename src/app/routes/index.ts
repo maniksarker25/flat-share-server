@@ -11,7 +11,7 @@ const moduleRoutes = [
     route: userRoutes,
   },
   {
-    path: "/",
+    path: "/flat",
     route: flatRoutes,
   },
   {
