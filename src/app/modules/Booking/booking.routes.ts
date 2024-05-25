@@ -7,14 +7,14 @@ import { bookingValidation } from "./booking.validation";
 const router = express.Router();
 
 router.post(
-  "/booking-applications",
+  "/",
   auth(),
   validateRequest(bookingValidation.createBookingValidationSchema),
   bookingController.createBooking
 );
-router.get("/booking-requests", auth(), bookingController.getBookingRequests);
+router.get("/", auth(), bookingController.getBookingRequests);
 router.put(
-  "/booking-requests/:bookingId",
+  "/:bookingId",
   auth(),
   validateRequest(bookingValidation.updateBookingFlatApplicationStatusSchema),
   bookingController.updateBookingFlatApplicationStatus

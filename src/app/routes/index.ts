@@ -15,7 +15,7 @@ const moduleRoutes = [
     route: flatRoutes,
   },
   {
-    path: "/",
+    path: "/booking-request",
     route: bookingRoutes,
   },
 ];
