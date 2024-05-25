@@ -36,5 +36,10 @@ router.patch(
   auth(UserRole.ADMIN),
   userController.changeUserRole
 );
+router.post(
+  "/change-password",
+  auth(UserRole.USER, UserRole.ADMIN),
+  userController.changePassword
+);
 
 export const userRoutes = router;

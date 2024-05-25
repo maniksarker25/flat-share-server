@@ -174,6 +174,39 @@ const changeUserRoleIntoDB = async (userId: string, role: UserRole) => {
   return result;
 };
 
+// change password
+const changePasswordIntoDB = async (
+  userId: string,
+  payload: { currentPassword: string; newPassword: string }
+) => {
+  const userInfo = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+  if (!userInfo) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  }
+  const isPasswordMatched = await bcrypt.compare(
+    payload?.currentPassword,
+    userInfo?.password
+  );
+  if (!isPasswordMatched) {
+    throw new AppError(httpStatus.FORBIDDEN, "Password does not matched");
+  }
+  const hashedPassword = await bcrypt.hash(payload?.newPassword, 12);
+  await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      password: hashedPassword,
+    },
+  });
+
+  return null;
+};
+
 export const userService = {
   registerUserIntoDB,
   loginUserIntoDB,
@@ -182,4 +215,5 @@ export const userService = {
   updateUserProfileIntoDB,
   changeUserStatusIntoDB,
   changeUserRoleIntoDB,
+  changePasswordIntoDB,
 };
