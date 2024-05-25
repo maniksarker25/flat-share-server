@@ -21,19 +21,23 @@ const createBookingIntoDB = async (userId: string, payload: Booking) => {
     throw new AppError(httpStatus.NOT_FOUND, "User not found");
   }
 
-  const bookingData = {
-    userId,
-    flatId: payload.flatId,
-  };
+  payload.userId = userId;
   const result = await prisma.booking.create({
-    data: bookingData,
+    data: payload,
   });
 
   return result;
 };
 // get booking requests from db
-const getBookingRequestsFromDB = async () => {
-  const result = await prisma.booking.findMany();
+const getMyBookingRequestsFromDB = async (userId: string) => {
+  const result = await prisma.booking.findMany({
+    where: {
+      userId,
+    },
+    include: {
+      flat: true,
+    },
+  });
   return result;
 };
 
@@ -62,6 +66,6 @@ const updateBookingFlatApplicationStatusIntoDB = async (
 };
 export const bookingService = {
   createBookingIntoDB,
-  getBookingRequestsFromDB,
+  getMyBookingRequestsFromDB,
   updateBookingFlatApplicationStatusIntoDB,
 };

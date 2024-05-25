@@ -63,13 +63,15 @@ model Flat {
 }
 
 model Booking {
-  id        String        @id @unique @default(uuid())
-  flatId    String
-  userId    String
-  email     String
-  status    BookingStatus @default(PENDING)
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
+  id         String        @id @unique @default(uuid())
+  flatId     String
+  userId     String
+  name       String
+  profession String
+  email      String
+  status     BookingStatus @default(PENDING)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
 
   flat Flat @relation(fields: [flatId], references: [id])
   user User @relation(fields: [userId], references: [id])

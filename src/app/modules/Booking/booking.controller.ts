@@ -15,8 +15,9 @@ const createBooking = catchAsync(async (req, res) => {
 });
 
 // get booking request
-const getBookingRequests = catchAsync(async (req, res) => {
-  const result = await bookingService.getBookingRequestsFromDB();
+const getMyBookingRequests = catchAsync(async (req, res) => {
+  const userId = req?.user?.id;
+  const result = await bookingService.getMyBookingRequestsFromDB(userId);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -42,6 +43,6 @@ const updateBookingFlatApplicationStatus = catchAsync(async (req, res) => {
 
 export const bookingController = {
   createBooking,
-  getBookingRequests,
+  getMyBookingRequests,
   updateBookingFlatApplicationStatus,
 };

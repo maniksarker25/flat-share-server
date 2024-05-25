@@ -6,6 +6,8 @@ import config from "../config";
 import httpStatus from "http-status";
 import AppError from "../error/appError";
 import { jwtHelper } from "../helpers/jwtHelper";
+import prisma from "../utils/prisma";
+import { UserStatus } from "@prisma/client";
 
 const auth = (...requiredRoles: string[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -26,7 +28,16 @@ const auth = (...requiredRoles: string[]) => {
     if (!decoded) {
       throw new AppError(httpStatus.UNAUTHORIZED, "Unauthorized Access");
     }
-    const { role } = decoded;
+    const { id, role } = decoded;
+    const userInfo = await prisma.user.findUnique({
+      where: {
+        id,
+        status: UserStatus.ACTIVE,
+      },
+    });
+    if (!userInfo) {
+      throw new AppError(httpStatus.UNAUTHORIZED, "You ae unauthorized");
+    }
 
     if (requiredRoles && !requiredRoles.includes(role)) {
       throw new AppError(httpStatus.UNAUTHORIZED, "You are unauthorized");
