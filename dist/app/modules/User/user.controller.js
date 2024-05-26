@@ -107,6 +107,18 @@ const changePassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
         data: result,
     });
 }));
+// Update profile
+const updateProfile = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _d;
+    const userId = (_d = req === null || req === void 0 ? void 0 : req.user) === null || _d === void 0 ? void 0 : _d.id;
+    const result = yield user_service_1.userService.updateProfileIntoDB(userId, req.body);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Profile updated successfully",
+        data: result,
+    });
+}));
 exports.userController = {
     registerUser,
     loginUser,
@@ -116,4 +128,5 @@ exports.userController = {
     changeUserStatus,
     changeUserRole,
     changePassword,
+    updateProfile,
 };

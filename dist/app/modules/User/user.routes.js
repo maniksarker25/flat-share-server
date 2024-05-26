@@ -21,4 +21,5 @@ user_controller_1.userController.updateUserProfileIntoDB);
 router.patch("/change-status/:userId", (0, auth_1.default)(client_1.UserRole.ADMIN), user_controller_1.userController.changeUserStatus);
 router.patch("/change-role/:userId", (0, auth_1.default)(client_1.UserRole.ADMIN), user_controller_1.userController.changeUserRole);
 router.post("/change-password", (0, auth_1.default)(client_1.UserRole.USER, client_1.UserRole.ADMIN), user_controller_1.userController.changePassword);
+router.patch("/update-profile", (0, auth_1.default)(client_1.UserRole.USER, client_1.UserRole.ADMIN), user_controller_1.userController.updateProfile);
 exports.userRoutes = router;

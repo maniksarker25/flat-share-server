@@ -187,6 +187,24 @@ const changePasswordIntoDB = (userId, payload) => __awaiter(void 0, void 0, void
     });
     return null;
 });
+// edit profile
+const updateProfileIntoDB = (userId, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const userInfo = yield prisma_1.default.user.findUnique({
+        where: {
+            id: userId,
+        },
+    });
+    if (!userInfo) {
+        throw new appError_1.default(http_status_1.default.NOT_FOUND, "User does not exist");
+    }
+    const result = yield prisma_1.default.user.update({
+        where: {
+            id: userId,
+        },
+        data: payload,
+    });
+    return result;
+});
 exports.userService = {
     registerUserIntoDB,
     loginUserIntoDB,
@@ -196,4 +214,5 @@ exports.userService = {
     changeUserStatusIntoDB,
     changeUserRoleIntoDB,
     changePasswordIntoDB,
+    updateProfileIntoDB,
 };
