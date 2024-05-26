@@ -41,7 +41,7 @@ router.post(
   auth(UserRole.USER, UserRole.ADMIN),
   userController.changePassword
 );
-router.post(
+router.patch(
   "/update-profile",
   auth(UserRole.USER, UserRole.ADMIN),
   userController.updateProfile
