@@ -25,7 +25,10 @@ const getFlatsFromDB = async (
   const convertStringToBoolean = convertStringParamsToBoolean(query);
   const { page, limit, skip } = calculatePagination(options);
   const { searchTerm, ...filterData } = convertStringToBoolean;
-  console.log(searchTerm);
+  console.log(filterData);
+  filterData.totalBedrooms = Number(filterData.totalBedrooms);
+  filterData.minPrice = Number(filterData.minPrice);
+  filterData.maxPrice = Number(filterData.maxPrice);
   // make a default and condition-------
   const andConditions: Prisma.FlatWhereInput[] = [];
 
@@ -42,17 +45,48 @@ const getFlatsFromDB = async (
   }
 
   // make queries for filter data
-  if (Object.keys(filterData)?.length > 0) {
+  // if (Object.keys(filterData)?.length > 0) {
+  //   andConditions.push({
+  //     AND: Object.keys(filterData)?.map((key) => ({
+  //       [key]: {
+  //         equals: (filterData as any)[key],
+  //       },
+  //     })),
+  //   });
+  // }
+
+  if (filterData?.totalBedrooms) {
     andConditions.push({
-      AND: Object.keys(filterData)?.map((key) => ({
-        [key]: {
-          equals: (filterData as any)[key],
-        },
-      })),
+      totalBedrooms: {
+        equals: filterData?.totalBedrooms,
+      },
+    });
+  }
+
+  if (filterData.minPrice && !filterData.maxPrice) {
+    andConditions.push({
+      rentAmount: {
+        gte: filterData.minPrice,
+      },
+    });
+  }
+  if (!filterData.minPrice && filterData.maxPrice) {
+    andConditions.push({
+      rentAmount: {
+        lte: filterData.maxPrice,
+      },
+    });
+  }
+  if (filterData.minPrice && filterData.maxPrice) {
+    andConditions.push({
+      rentAmount: {
+        lte: filterData.maxPrice,
+        gte: filterData.minPrice,
+      },
     });
   }
   const whereConditions: Prisma.FlatWhereInput = { AND: andConditions };
-  // console.dir(whereConditions, { depth: "infinity" });
+  console.dir(whereConditions, { depth: "infinity" });
   const result = await prisma.flat.findMany({
     where: whereConditions,
     skip,
