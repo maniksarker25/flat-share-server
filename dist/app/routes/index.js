@@ -10,15 +10,15 @@ const booking_routes_1 = require("../modules/Booking/booking.routes");
 const router = express_1.default.Router();
 const moduleRoutes = [
     {
-        path: "/",
+        path: "/user",
         route: user_routes_1.userRoutes,
     },
     {
-        path: "/",
+        path: "/flat",
         route: flat_routes_1.flatRoutes,
     },
     {
-        path: "/",
+        path: "/booking-request",
         route: booking_routes_1.bookingRoutes,
     },
 ];

@@ -17,7 +17,9 @@ const config_1 = __importDefault(require("../config"));
 const http_status_1 = __importDefault(require("http-status"));
 const appError_1 = __importDefault(require("../error/appError"));
 const jwtHelper_1 = require("../helpers/jwtHelper");
-const auth = () => {
+const prisma_1 = __importDefault(require("../utils/prisma"));
+const client_1 = require("@prisma/client");
+const auth = (...requiredRoles) => {
     return (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         var _a;
         const token = (_a = req === null || req === void 0 ? void 0 : req.headers) === null || _a === void 0 ? void 0 : _a.authorization;
@@ -33,6 +35,19 @@ const auth = () => {
         }
         if (!decoded) {
             throw new appError_1.default(http_status_1.default.UNAUTHORIZED, "Unauthorized Access");
+        }
+        const { id, role } = decoded;
+        const userInfo = yield prisma_1.default.user.findUnique({
+            where: {
+                id,
+                status: client_1.UserStatus.ACTIVE,
+            },
+        });
+        if (!userInfo) {
+            throw new appError_1.default(http_status_1.default.UNAUTHORIZED, "You ae unauthorized");
+        }
+        if (requiredRoles && !requiredRoles.includes(role)) {
+            throw new appError_1.default(http_status_1.default.UNAUTHORIZED, "You are unauthorized");
         }
         req.user = decoded;
         next();

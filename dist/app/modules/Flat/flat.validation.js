@@ -16,26 +16,30 @@ const createFlatValidationSchema = zod_1.z.object({
             required_error: "Total rooms is required ",
             invalid_type_error: "Total rooms must be a number",
         }),
-        utilitiesDescription: zod_1.z.string({
-            required_error: "Utilities description is required",
-            invalid_type_error: "Utilities description must be a string",
+        detailedDescription: zod_1.z.string({
+            required_error: "Detailed description is required",
+            invalid_type_error: "Detailed description must be a string",
         }),
         location: zod_1.z.string({
             required_error: "Location is required",
             invalid_type_error: "Location must be a string",
         }),
-        description: zod_1.z.string({
-            required_error: "Description is required",
-            invalid_type_error: "Description must be a string",
+        amenities: zod_1.z.string({
+            required_error: "Amenities is required",
+            invalid_type_error: "Amenities must be a string",
         }),
-        rent: zod_1.z.number({
+        rentAmount: zod_1.z.number({
             required_error: "Rent amount is required ",
             invalid_type_error: "Rent amount must be a number",
         }),
-        advanceAmount: zod_1.z.number({
-            required_error: "Advance amount is required ",
-            invalid_type_error: "Advance amount must be a number",
+        advancedAmount: zod_1.z.number({
+            required_error: "Advanced amount is required ",
+            invalid_type_error: "Advanced amount must be a number",
         }),
+        photos: zod_1.z.array(zod_1.z.string({
+            required_error: "Each photo is required",
+            invalid_type_error: "Each photo must be a string",
+        })),
     }),
 });
 const updateFlatValidationSchema = zod_1.z.object({
@@ -55,9 +59,9 @@ const updateFlatValidationSchema = zod_1.z.object({
             invalid_type_error: "Total rooms must be a number",
         })
             .optional(),
-        utilitiesDescription: zod_1.z
+        detailedDescription: zod_1.z
             .string({
-            invalid_type_error: "Utilities description must be a string",
+            invalid_type_error: "Detailed description must be a string",
         })
             .optional(),
         location: zod_1.z
@@ -65,22 +69,26 @@ const updateFlatValidationSchema = zod_1.z.object({
             invalid_type_error: "Location must be a string",
         })
             .optional(),
-        description: zod_1.z
+        amenities: zod_1.z
             .string({
-            invalid_type_error: "Description must be a string",
+            invalid_type_error: "Amenities must be a string",
         })
             .optional(),
-        rent: zod_1.z
+        rentAmount: zod_1.z
             .number({
             invalid_type_error: "Rent amount must be a number",
         })
             .optional(),
-        advanceAmount: zod_1.z
+        advancedAmount: zod_1.z
             .number({
-            invalid_type_error: "Advance amount must be a number",
+            invalid_type_error: "Advanced amount must be a number",
         })
             .optional(),
-        availability: zod_1.z.boolean().optional(),
+        photos: zod_1.z
+            .array(zod_1.z.string({
+            invalid_type_error: "Each photo must be a string",
+        }))
+            .optional(),
     }),
 });
 exports.flatValidation = {

@@ -33,18 +33,22 @@ const createBookingIntoDB = (userId, payload) => __awaiter(void 0, void 0, void 
     if (!user) {
         throw new appError_1.default(http_status_1.default.NOT_FOUND, "User not found");
     }
-    const bookingData = {
-        userId,
-        flatId: payload.flatId,
-    };
+    payload.userId = userId;
     const result = yield prisma_1.default.booking.create({
-        data: bookingData,
+        data: payload,
     });
     return result;
 });
 // get booking requests from db
-const getBookingRequestsFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield prisma_1.default.booking.findMany();
+const getMyBookingRequestsFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma_1.default.booking.findMany({
+        where: {
+            userId,
+        },
+        include: {
+            flat: true,
+        },
+    });
     return result;
 });
 // update booking flat application status into db
@@ -68,6 +72,6 @@ const updateBookingFlatApplicationStatusIntoDB = (bookingId, status) => __awaite
 });
 exports.bookingService = {
     createBookingIntoDB,
-    getBookingRequestsFromDB,
+    getMyBookingRequestsFromDB,
     updateBookingFlatApplicationStatusIntoDB,
 };

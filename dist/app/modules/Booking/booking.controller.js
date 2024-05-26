@@ -29,8 +29,10 @@ const createBooking = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
     });
 }));
 // get booking request
-const getBookingRequests = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield booking_service_1.bookingService.getBookingRequestsFromDB();
+const getMyBookingRequests = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _b;
+    const userId = (_b = req === null || req === void 0 ? void 0 : req.user) === null || _b === void 0 ? void 0 : _b.id;
+    const result = yield booking_service_1.bookingService.getMyBookingRequestsFromDB(userId);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
@@ -51,6 +53,6 @@ const updateBookingFlatApplicationStatus = (0, catchAsync_1.default)((req, res) 
 }));
 exports.bookingController = {
     createBooking,
-    getBookingRequests,
+    getMyBookingRequests,
     updateBookingFlatApplicationStatus,
 };

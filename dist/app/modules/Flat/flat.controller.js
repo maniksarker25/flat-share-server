@@ -20,7 +20,9 @@ const flat_service_1 = require("./flat.service");
 const pick_1 = __importDefault(require("../../utils/pick"));
 const flat_constant_1 = require("./flat.constant");
 const createFlat = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield flat_service_1.flatService.createFlatIntoDB(req.body);
+    var _a;
+    const userId = (_a = req === null || req === void 0 ? void 0 : req.user) === null || _a === void 0 ? void 0 : _a.id;
+    const result = yield flat_service_1.flatService.createFlatIntoDB(userId, req.body);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.CREATED,
         success: true,
@@ -52,8 +54,46 @@ const updateFlat = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
         data: result,
     });
 }));
+// get single flat
+const getSingleFlat = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const flatId = req.params.flatId;
+    const result = yield flat_service_1.flatService.getSingleFlatFromDB(flatId);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Flat information retrieved successfully",
+        data: result,
+    });
+}));
+// get my flats
+const getMyFlats = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _b;
+    const userId = (_b = req === null || req === void 0 ? void 0 : req.user) === null || _b === void 0 ? void 0 : _b.id;
+    const result = yield flat_service_1.flatService.getMyFlatsFromDB(userId);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Flat  retrieved successfully",
+        data: result,
+    });
+}));
+// delete flat
+const deleteFlat = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c;
+    const flatId = (_c = req === null || req === void 0 ? void 0 : req.params) === null || _c === void 0 ? void 0 : _c.id;
+    const result = yield flat_service_1.flatService.deleteFlatFromDB(flatId);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Flat deleted  successfully",
+        data: result,
+    });
+}));
 exports.flatController = {
     createFlat,
     getFlats,
+    getMyFlats,
+    getSingleFlat,
     updateFlat,
+    deleteFlat,
 };

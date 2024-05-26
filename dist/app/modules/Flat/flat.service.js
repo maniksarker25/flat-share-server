@@ -30,7 +30,8 @@ const flat_constant_1 = require("./flat.constant");
 const appError_1 = __importDefault(require("../../error/appError"));
 const http_status_1 = __importDefault(require("http-status"));
 const convertSrtingToBoolean_1 = __importDefault(require("../../helpers/convertSrtingToBoolean"));
-const createFlatIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+const createFlatIntoDB = (userId, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    payload.userId = userId;
     const result = yield prisma_1.default.flat.create({
         data: payload,
     });
@@ -92,6 +93,27 @@ const getFlatsFromDB = (query, options) => __awaiter(void 0, void 0, void 0, fun
         data: result,
     };
 });
+// get single flat
+const getSingleFlatFromDB = (flatId) => __awaiter(void 0, void 0, void 0, function* () {
+    const flat = yield prisma_1.default.flat.findUnique({
+        where: {
+            id: flatId,
+        },
+    });
+    if (!flat) {
+        throw new appError_1.default(http_status_1.default.NOT_FOUND, "Flat not found");
+    }
+    return flat;
+});
+// get my flats
+const getMyFlatsFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma_1.default.flat.findMany({
+        where: {
+            userId,
+        },
+    });
+    return result;
+});
 // update flat into db
 const updateFlatIntoDB = (flatId, payload) => __awaiter(void 0, void 0, void 0, function* () {
     const flat = yield prisma_1.default.flat.findUnique({
@@ -110,8 +132,27 @@ const updateFlatIntoDB = (flatId, payload) => __awaiter(void 0, void 0, void 0, 
     });
     return result;
 });
+const deleteFlatFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const flat = yield prisma_1.default.flat.findUnique({
+        where: {
+            id,
+        },
+    });
+    if (!flat) {
+        throw new appError_1.default(http_status_1.default.NOT_FOUND, "Flat not found");
+    }
+    const result = yield prisma_1.default.flat.delete({
+        where: {
+            id,
+        },
+    });
+    return result;
+});
 exports.flatService = {
     createFlatIntoDB,
     getFlatsFromDB,
+    getMyFlatsFromDB,
+    getSingleFlatFromDB,
     updateFlatIntoDB,
+    deleteFlatFromDB,
 };

@@ -60,9 +60,60 @@ const updateUserProfileIntoDB = (0, catchAsync_1.default)((req, res) => __awaite
         data: result,
     });
 }));
+// get all user
+const getAllUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_service_1.userService.getAllUserFromDB();
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Users retrieved successfully",
+        data: result,
+    });
+}));
+// change user status
+const changeUserStatus = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("request", req);
+    const { userId } = req === null || req === void 0 ? void 0 : req.params;
+    const { status } = req.body;
+    const result = yield user_service_1.userService.changeUserStatusIntoDB(userId, status);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "User status updated  successfully",
+        data: result,
+    });
+}));
+// change user role
+const changeUserRole = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId } = req === null || req === void 0 ? void 0 : req.params;
+    const { role } = req.body;
+    const result = yield user_service_1.userService.changeUserRoleIntoDB(userId, role);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "User role updated  successfully",
+        data: result,
+    });
+}));
+// change password
+const changePassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c;
+    const userId = (_c = req === null || req === void 0 ? void 0 : req.user) === null || _c === void 0 ? void 0 : _c.id;
+    const result = yield user_service_1.userService.changePasswordIntoDB(userId, req.body);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Password changed successfully",
+        data: result,
+    });
+}));
 exports.userController = {
     registerUser,
     loginUser,
+    getAllUser,
     getUserProfile,
     updateUserProfileIntoDB,
+    changeUserStatus,
+    changeUserRole,
+    changePassword,
 };
