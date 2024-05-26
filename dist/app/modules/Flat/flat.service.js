@@ -38,12 +38,14 @@ const createFlatIntoDB = (userId, payload) => __awaiter(void 0, void 0, void 0, 
     return result;
 });
 const getFlatsFromDB = (query, options) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
     // destructure limit and skip
     const convertStringToBoolean = (0, convertSrtingToBoolean_1.default)(query);
     const { page, limit, skip } = (0, paginatonHelper_1.calculatePagination)(options);
     const { searchTerm } = convertStringToBoolean, filterData = __rest(convertStringToBoolean, ["searchTerm"]);
-    console.log(searchTerm);
+    console.log(filterData);
+    filterData.totalBedrooms = Number(filterData.totalBedrooms);
+    filterData.minPrice = Number(filterData.minPrice);
+    filterData.maxPrice = Number(filterData.maxPrice);
     // make a default and condition-------
     const andConditions = [];
     // if searchTerm is exists in query
@@ -58,17 +60,46 @@ const getFlatsFromDB = (query, options) => __awaiter(void 0, void 0, void 0, fun
         });
     }
     // make queries for filter data
-    if (((_a = Object.keys(filterData)) === null || _a === void 0 ? void 0 : _a.length) > 0) {
+    // if (Object.keys(filterData)?.length > 0) {
+    //   andConditions.push({
+    //     AND: Object.keys(filterData)?.map((key) => ({
+    //       [key]: {
+    //         equals: (filterData as any)[key],
+    //       },
+    //     })),
+    //   });
+    // }
+    if (filterData === null || filterData === void 0 ? void 0 : filterData.totalBedrooms) {
         andConditions.push({
-            AND: (_b = Object.keys(filterData)) === null || _b === void 0 ? void 0 : _b.map((key) => ({
-                [key]: {
-                    equals: filterData[key],
-                },
-            })),
+            totalBedrooms: {
+                equals: filterData === null || filterData === void 0 ? void 0 : filterData.totalBedrooms,
+            },
+        });
+    }
+    if (filterData.minPrice && !filterData.maxPrice) {
+        andConditions.push({
+            rentAmount: {
+                gte: filterData.minPrice,
+            },
+        });
+    }
+    if (!filterData.minPrice && filterData.maxPrice) {
+        andConditions.push({
+            rentAmount: {
+                lte: filterData.maxPrice,
+            },
+        });
+    }
+    if (filterData.minPrice && filterData.maxPrice) {
+        andConditions.push({
+            rentAmount: {
+                lte: filterData.maxPrice,
+                gte: filterData.minPrice,
+            },
         });
     }
     const whereConditions = { AND: andConditions };
-    // console.dir(whereConditions, { depth: "infinity" });
+    console.dir(whereConditions, { depth: "infinity" });
     const result = yield prisma_1.default.flat.findMany({
         where: whereConditions,
         skip,

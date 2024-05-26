@@ -41,5 +41,10 @@ router.post(
   auth(UserRole.USER, UserRole.ADMIN),
   userController.changePassword
 );
+router.post(
+  "/update-profile",
+  auth(UserRole.USER, UserRole.ADMIN),
+  userController.updateProfile
+);
 
 export const userRoutes = router;

@@ -207,6 +207,28 @@ const changePasswordIntoDB = async (
   return null;
 };
 
+// edit profile
+const updateProfileIntoDB = async (
+  userId: string,
+  payload: { username: string; email: string }
+) => {
+  const userInfo = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+  if (!userInfo) {
+    throw new AppError(httpStatus.NOT_FOUND, "User does not exist");
+  }
+  const result = await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: payload,
+  });
+  return result;
+};
+
 export const userService = {
   registerUserIntoDB,
   loginUserIntoDB,
@@ -216,4 +238,5 @@ export const userService = {
   changeUserStatusIntoDB,
   changeUserRoleIntoDB,
   changePasswordIntoDB,
+  updateProfileIntoDB,
 };
