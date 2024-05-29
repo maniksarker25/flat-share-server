@@ -165,10 +165,24 @@ const deleteFlatFromDB = async (id: string) => {
   if (!flat) {
     throw new AppError(httpStatus.NOT_FOUND, "Flat not found");
   }
-  const result = await prisma.flat.delete({
-    where: {
-      id,
-    },
+  // const result = await prisma.flat.delete({
+  //   where: {
+  //     id,
+  //   },
+  // });
+  // return result;
+  const result = await prisma.$transaction(async (transactionClient) => {
+    const deleteBooking = await transactionClient.booking.deleteMany({
+      where: {
+        flatId: id,
+      },
+    });
+
+    const deleteFlat = await transactionClient.flat.delete({
+      where: {
+        id,
+      },
+    });
   });
   return result;
 };
