@@ -23,6 +23,7 @@ const auth = (...requiredRoles) => {
     return (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         var _a;
         const token = (_a = req === null || req === void 0 ? void 0 : req.headers) === null || _a === void 0 ? void 0 : _a.authorization;
+        console.log(token);
         if (!token) {
             throw new appError_1.default(http_status_1.default.UNAUTHORIZED, "Unauthorized Access");
         }
@@ -43,6 +44,7 @@ const auth = (...requiredRoles) => {
                 status: client_1.UserStatus.ACTIVE,
             },
         });
+        // console.log(userInfo);
         if (!userInfo) {
             throw new appError_1.default(http_status_1.default.UNAUTHORIZED, "You ae unauthorized");
         }

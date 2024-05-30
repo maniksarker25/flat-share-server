@@ -86,10 +86,15 @@ const loginUserIntoDB = async (payload: TLoginUser) => {
     config.jwt_access_secret as string,
     config.jwt_access_expires_in as string
   );
-
   return {
     token: accessToken,
   };
+};
+
+// get all user from db
+const getAllUserFromDB = async () => {
+  const result = await prisma.user.findMany();
+  return result;
 };
 
 //get user profile
@@ -122,12 +127,6 @@ const updateUserProfileIntoDB = async (
     data: payload,
   });
 
-  return result;
-};
-
-// get all user from db
-const getAllUserFromDB = async () => {
-  const result = await prisma.user.findMany();
   return result;
 };
 

@@ -89,6 +89,11 @@ const loginUserIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function*
         token: accessToken,
     };
 });
+// get all user from db
+const getAllUserFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma_1.default.user.findMany();
+    return result;
+});
 //get user profile
 const getUserProfileFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.user.findUnique({
@@ -113,11 +118,6 @@ const updateUserProfileIntoDB = (userId, payload) => __awaiter(void 0, void 0, v
         },
         data: payload,
     });
-    return result;
-});
-// get all user from db
-const getAllUserFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield prisma_1.default.user.findMany();
     return result;
 });
 // change user status

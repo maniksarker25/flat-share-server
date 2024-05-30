@@ -172,11 +172,24 @@ const deleteFlatFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () 
     if (!flat) {
         throw new appError_1.default(http_status_1.default.NOT_FOUND, "Flat not found");
     }
-    const result = yield prisma_1.default.flat.delete({
-        where: {
-            id,
-        },
-    });
+    // const result = await prisma.flat.delete({
+    //   where: {
+    //     id,
+    //   },
+    // });
+    // return result;
+    const result = yield prisma_1.default.$transaction((transactionClient) => __awaiter(void 0, void 0, void 0, function* () {
+        const deleteBooking = yield transactionClient.booking.deleteMany({
+            where: {
+                flatId: id,
+            },
+        });
+        const deleteFlat = yield transactionClient.flat.delete({
+            where: {
+                id,
+            },
+        });
+    }));
     return result;
 });
 exports.flatService = {
