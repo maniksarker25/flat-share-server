@@ -36,6 +36,12 @@ app.use((0, cors_1.default)({
     origin: "https://flat-share-client-three.vercel.app",
     credentials: true,
 }));
+// app.use(
+//   cors({
+//     origin: "http://localhost:3000",
+//     credentials: true,
+//   })
+// );
 // parser ----------------------------------------------------------------
 // make some changes
 app.use(express_1.default.json());

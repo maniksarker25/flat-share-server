@@ -16,5 +16,5 @@ router.get("/", flat_controller_1.flatController.getFlats);
 router.get("/my-flats", (0, auth_1.default)(client_1.UserRole.USER), flat_controller_1.flatController.getMyFlats);
 router.get("/:flatId", flat_controller_1.flatController.getSingleFlat);
 router.put("/:flatId", (0, auth_1.default)(), (0, validateRequest_1.default)(flat_validation_1.flatValidation.updateFlatValidationSchema), flat_controller_1.flatController.updateFlat);
-router.delete("/:id", (0, auth_1.default)(client_1.UserRole.ADMIN), flat_controller_1.flatController.deleteFlat);
+router.delete("/:id", (0, auth_1.default)(client_1.UserRole.ADMIN, client_1.UserRole.USER), flat_controller_1.flatController.deleteFlat);
 exports.flatRoutes = router;
