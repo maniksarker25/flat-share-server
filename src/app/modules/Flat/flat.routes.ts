@@ -18,7 +18,7 @@ router.get("/", flatController.getFlats);
 router.get("/my-flats", auth(UserRole.USER), flatController.getMyFlats);
 router.get(
   "/:flatId",
-  auth(UserRole.ADMIN, UserRole.USER),
+  // auth(UserRole.ADMIN, UserRole.USER),
   flatController.getSingleFlat
 );
 router.put(

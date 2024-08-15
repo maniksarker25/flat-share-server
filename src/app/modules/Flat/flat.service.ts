@@ -25,7 +25,7 @@ const getFlatsFromDB = async (
   const convertStringToBoolean = convertStringParamsToBoolean(query);
   const { page, limit, skip } = calculatePagination(options);
   const { searchTerm, ...filterData } = convertStringToBoolean;
-  console.log(filterData);
+  // console.log(filterData);
   filterData.totalBedrooms = Number(filterData.totalBedrooms);
   filterData.minPrice = Number(filterData.minPrice);
   filterData.maxPrice = Number(filterData.maxPrice);

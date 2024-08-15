@@ -12,7 +12,7 @@ import { UserStatus } from "@prisma/client";
 const auth = (...requiredRoles: string[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const token = req?.headers?.authorization;
-    console.log(token);
+    // console.log(token);
     if (!token) {
       throw new AppError(httpStatus.UNAUTHORIZED, "Unauthorized Access");
     }

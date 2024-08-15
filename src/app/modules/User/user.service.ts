@@ -57,12 +57,14 @@ const registerUserIntoDB = async (payload: User) => {
 
 // login user into db
 const loginUserIntoDB = async (payload: TLoginUser) => {
+  console.log("payload", payload);
   const user = await prisma.user.findUnique({
     where: {
       email: payload.email,
       status: UserStatus.ACTIVE,
     },
   });
+  console.log("user");
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, "User not found");
   }
@@ -86,6 +88,7 @@ const loginUserIntoDB = async (payload: TLoginUser) => {
     config.jwt_access_secret as string,
     config.jwt_access_expires_in as string
   );
+  console.log("accessToken", accessToken);
   return {
     token: accessToken,
   };

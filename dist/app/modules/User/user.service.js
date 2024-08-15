@@ -1,16 +1,42 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+var __awaiter =
+  (this && this.__awaiter) ||
+  function (thisArg, _arguments, P, generator) {
+    function adopt(value) {
+      return value instanceof P
+        ? value
+        : new P(function (resolve) {
+            resolve(value);
+          });
+    }
     return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
+      function fulfilled(value) {
+        try {
+          step(generator.next(value));
+        } catch (e) {
+          reject(e);
+        }
+      }
+      function rejected(value) {
+        try {
+          step(generator["throw"](value));
+        } catch (e) {
+          reject(e);
+        }
+      }
+      function step(result) {
+        result.done
+          ? resolve(result.value)
+          : adopt(result.value).then(fulfilled, rejected);
+      }
+      step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
+  };
+var __importDefault =
+  (this && this.__importDefault) ||
+  function (mod) {
+    return mod && mod.__esModule ? mod : { default: mod };
+  };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userService = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
@@ -20,14 +46,18 @@ const config_1 = __importDefault(require("../../config"));
 const jwtHelper_1 = require("../../helpers/jwtHelper");
 const appError_1 = __importDefault(require("../../error/appError"));
 const http_status_1 = __importDefault(require("http-status"));
-const registerUserIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+const registerUserIntoDB = (payload) =>
+  __awaiter(void 0, void 0, void 0, function* () {
     const isUserExists = yield prisma_1.default.user.findUnique({
-        where: {
-            email: payload.email,
-        },
+      where: {
+        email: payload.email,
+      },
     });
     if (isUserExists) {
-        throw new appError_1.default(http_status_1.default.BAD_REQUEST, "This user already exists");
+      throw new appError_1.default(
+        http_status_1.default.BAD_REQUEST,
+        "This user already exists"
+      );
     }
     const hashedPassword = yield bcrypt_1.default.hash(payload.password, 12);
     // make user data
@@ -60,159 +90,201 @@ const registerUserIntoDB = (payload) => __awaiter(void 0, void 0, void 0, functi
     // });
     payload.password = hashedPassword;
     const result = yield prisma_1.default.user.create({
-        data: payload,
+      data: payload,
     });
     return result;
-});
+  });
 // login user into db
-const loginUserIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+const loginUserIntoDB = (payload) =>
+  __awaiter(void 0, void 0, void 0, function* () {
     const user = yield prisma_1.default.user.findUnique({
-        where: {
-            email: payload.email,
-            status: client_1.UserStatus.ACTIVE,
-        },
+      where: {
+        email: payload.email,
+        status: client_1.UserStatus.ACTIVE,
+      },
     });
     if (!user) {
-        throw new appError_1.default(http_status_1.default.NOT_FOUND, "User not found");
+      throw new appError_1.default(
+        http_status_1.default.NOT_FOUND,
+        "User not found"
+      );
     }
-    const isPasswordMatched = yield bcrypt_1.default.compare(payload === null || payload === void 0 ? void 0 : payload.password, user === null || user === void 0 ? void 0 : user.password);
+    const isPasswordMatched = yield bcrypt_1.default.compare(
+      payload === null || payload === void 0 ? void 0 : payload.password,
+      user === null || user === void 0 ? void 0 : user.password
+    );
     if (!isPasswordMatched) {
-        throw new appError_1.default(http_status_1.default.FORBIDDEN, "Password does not matched");
+      throw new appError_1.default(
+        http_status_1.default.FORBIDDEN,
+        "Password does not matched"
+      );
     }
     const jwtPayload = {
-        id: user.id,
-        email: user === null || user === void 0 ? void 0 : user.email,
-        role: user === null || user === void 0 ? void 0 : user.role,
+      id: user.id,
+      email: user === null || user === void 0 ? void 0 : user.email,
+      role: user === null || user === void 0 ? void 0 : user.role,
     };
-    const accessToken = jwtHelper_1.jwtHelper.generateToken(jwtPayload, config_1.default.jwt_access_secret, config_1.default.jwt_access_expires_in);
+    const accessToken = jwtHelper_1.jwtHelper.generateToken(
+      jwtPayload,
+      config_1.default.jwt_access_secret,
+      config_1.default.jwt_access_expires_in
+    );
     return {
-        token: accessToken,
+      token: accessToken,
     };
-});
+  });
 // get all user from db
-const getAllUserFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
+const getAllUserFromDB = () =>
+  __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.user.findMany();
     return result;
-});
+  });
 //get user profile
-const getUserProfileFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+const getUserProfileFromDB = (userId) =>
+  __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.user.findUnique({
-        where: {
-            id: userId,
-        },
-        select: {
-            id: true,
-            username: true,
-            email: true,
-            status: true,
-            role: true,
-        },
+      where: {
+        id: userId,
+      },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        status: true,
+        role: true,
+      },
     });
     return result;
-});
+  });
 // update user profile
-const updateUserProfileIntoDB = (userId, payload) => __awaiter(void 0, void 0, void 0, function* () {
+const updateUserProfileIntoDB = (userId, payload) =>
+  __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.userProfile.update({
-        where: {
-            userId,
-        },
-        data: payload,
+      where: {
+        userId,
+      },
+      data: payload,
     });
     return result;
-});
+  });
 // change user status
-const changeUserStatusIntoDB = (userId, status) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("userId", userId);
-    console.log("status", status);
+const changeUserStatusIntoDB = (userId, status) =>
+  __awaiter(void 0, void 0, void 0, function* () {
+    // console.log("userId", userId);
+    // console.log("status", status);
     const userInfo = yield prisma_1.default.user.findUnique({
-        where: {
-            id: userId,
-        },
+      where: {
+        id: userId,
+      },
     });
     if (!userInfo) {
-        throw new appError_1.default(http_status_1.default.NOT_FOUND, "User not found");
+      throw new appError_1.default(
+        http_status_1.default.NOT_FOUND,
+        "User not found"
+      );
     }
     const result = yield prisma_1.default.user.update({
-        where: {
-            id: userId,
-        },
-        data: {
-            status: status,
-        },
+      where: {
+        id: userId,
+      },
+      data: {
+        status: status,
+      },
     });
     return result;
-});
+  });
 // change user role
-const changeUserRoleIntoDB = (userId, role) => __awaiter(void 0, void 0, void 0, function* () {
+const changeUserRoleIntoDB = (userId, role) =>
+  __awaiter(void 0, void 0, void 0, function* () {
     const userInfo = yield prisma_1.default.user.findUnique({
-        where: {
-            id: userId,
-        },
+      where: {
+        id: userId,
+      },
     });
     if (!userInfo) {
-        throw new appError_1.default(http_status_1.default.NOT_FOUND, "User not found");
+      throw new appError_1.default(
+        http_status_1.default.NOT_FOUND,
+        "User not found"
+      );
     }
     const result = yield prisma_1.default.user.update({
-        where: {
-            id: userId,
-        },
-        data: {
-            role: role,
-        },
+      where: {
+        id: userId,
+      },
+      data: {
+        role: role,
+      },
     });
     return result;
-});
+  });
 // change password
-const changePasswordIntoDB = (userId, payload) => __awaiter(void 0, void 0, void 0, function* () {
+const changePasswordIntoDB = (userId, payload) =>
+  __awaiter(void 0, void 0, void 0, function* () {
     const userInfo = yield prisma_1.default.user.findUnique({
-        where: {
-            id: userId,
-        },
+      where: {
+        id: userId,
+      },
     });
     if (!userInfo) {
-        throw new appError_1.default(http_status_1.default.NOT_FOUND, "User not found");
+      throw new appError_1.default(
+        http_status_1.default.NOT_FOUND,
+        "User not found"
+      );
     }
-    const isPasswordMatched = yield bcrypt_1.default.compare(payload === null || payload === void 0 ? void 0 : payload.currentPassword, userInfo === null || userInfo === void 0 ? void 0 : userInfo.password);
+    const isPasswordMatched = yield bcrypt_1.default.compare(
+      payload === null || payload === void 0 ? void 0 : payload.currentPassword,
+      userInfo === null || userInfo === void 0 ? void 0 : userInfo.password
+    );
     if (!isPasswordMatched) {
-        throw new appError_1.default(http_status_1.default.FORBIDDEN, "Password does not matched");
+      throw new appError_1.default(
+        http_status_1.default.FORBIDDEN,
+        "Password does not matched"
+      );
     }
-    const hashedPassword = yield bcrypt_1.default.hash(payload === null || payload === void 0 ? void 0 : payload.newPassword, 12);
+    const hashedPassword = yield bcrypt_1.default.hash(
+      payload === null || payload === void 0 ? void 0 : payload.newPassword,
+      12
+    );
     yield prisma_1.default.user.update({
-        where: {
-            id: userId,
-        },
-        data: {
-            password: hashedPassword,
-        },
+      where: {
+        id: userId,
+      },
+      data: {
+        password: hashedPassword,
+      },
     });
     return null;
-});
+  });
 // edit profile
-const updateProfileIntoDB = (userId, payload) => __awaiter(void 0, void 0, void 0, function* () {
+const updateProfileIntoDB = (userId, payload) =>
+  __awaiter(void 0, void 0, void 0, function* () {
     const userInfo = yield prisma_1.default.user.findUnique({
-        where: {
-            id: userId,
-        },
+      where: {
+        id: userId,
+      },
     });
     if (!userInfo) {
-        throw new appError_1.default(http_status_1.default.NOT_FOUND, "User does not exist");
+      throw new appError_1.default(
+        http_status_1.default.NOT_FOUND,
+        "User does not exist"
+      );
     }
     const result = yield prisma_1.default.user.update({
-        where: {
-            id: userId,
-        },
-        data: payload,
+      where: {
+        id: userId,
+      },
+      data: payload,
     });
     return result;
-});
+  });
 exports.userService = {
-    registerUserIntoDB,
-    loginUserIntoDB,
-    getAllUserFromDB,
-    getUserProfileFromDB,
-    updateUserProfileIntoDB,
-    changeUserStatusIntoDB,
-    changeUserRoleIntoDB,
-    changePasswordIntoDB,
-    updateProfileIntoDB,
+  registerUserIntoDB,
+  loginUserIntoDB,
+  getAllUserFromDB,
+  getUserProfileFromDB,
+  updateUserProfileIntoDB,
+  changeUserStatusIntoDB,
+  changeUserRoleIntoDB,
+  changePasswordIntoDB,
+  updateProfileIntoDB,
 };
