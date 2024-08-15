@@ -49,8 +49,26 @@ const registerUserIntoDB = async (payload: User) => {
 
   payload.password = hashedPassword;
 
-  const result = await prisma.user.create({
-    data: payload,
+  // const result = await prisma.user.create({
+  //   data: payload,
+  // });
+  const result = await prisma.$transaction(async (transactionClient) => {
+    const createUser = await transactionClient.user.create({
+      data: payload,
+    });
+    const profileData = {
+      userId: createUser?.id,
+      bio: "",
+      profession: "",
+      address: "",
+      education: "",
+      phone: "",
+      email: "",
+    };
+    await transactionClient.userProfile.create({
+      data: profileData,
+    });
+    return createUser;
   });
   return result;
 };
@@ -112,6 +130,10 @@ const getUserProfileFromDB = async (userId: string) => {
       email: true,
       status: true,
       role: true,
+      createdAt: true,
+      updatedAt: true,
+      userProfile: true, // Include userProfile
+      // Exclude the password field
     },
   });
 
