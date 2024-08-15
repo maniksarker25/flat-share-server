@@ -232,21 +232,34 @@ const changePasswordIntoDB = async (
 };
 
 // edit profile
+// const updateProfileIntoDB = async (
+//   userId: string,
+//   payload: { username: string; email: string }
+// ) => {
+//   const userInfo = await prisma.user.findUnique({
+//     where: {
+//       id: userId,
+//     },
+//   });
+//   if (!userInfo) {
+//     throw new AppError(httpStatus.NOT_FOUND, "User does not exist");
+//   }
+//   const result = await prisma.user.update({
+//     where: {
+//       id: userId,
+//     },
+//     data: payload,
+//   });
+//   return result;
+// };
+
 const updateProfileIntoDB = async (
   userId: string,
-  payload: { username: string; email: string }
+  payload: Partial<UserProfile>
 ) => {
-  const userInfo = await prisma.user.findUnique({
+  const result = await prisma.userProfile.update({
     where: {
-      id: userId,
-    },
-  });
-  if (!userInfo) {
-    throw new AppError(httpStatus.NOT_FOUND, "User does not exist");
-  }
-  const result = await prisma.user.update({
-    where: {
-      id: userId,
+      userId,
     },
     data: payload,
   });
