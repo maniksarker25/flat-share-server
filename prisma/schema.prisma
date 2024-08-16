@@ -31,17 +31,18 @@ model User {
 }
 
 model UserProfile {
-  id         String   @id @unique @default(uuid())
-  userId     String   @unique
-  user       User     @relation(fields: [userId], references: [id])
-  bio        String
-  profession String
-  address    String
-  education  String
-  phone      String
-  email      String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id           String   @id @unique @default(uuid())
+  userId       String   @unique
+  user         User     @relation(fields: [userId], references: [id])
+  bio          String
+  profileImage String
+  profession   String
+  address      String
+  education    String
+  phone        String
+  email        String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   @@map("userProfiles")
 }
