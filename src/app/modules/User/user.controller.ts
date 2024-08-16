@@ -26,6 +26,7 @@ const loginUser = catchAsync(async (req, res) => {
 
 // get user profile
 const getUserProfile = catchAsync(async (req, res) => {
+  console.log("user", req?.user);
   const userId = req.user?.id;
   const result = await userService.getUserProfileFromDB(userId);
   sendResponse(res, {
@@ -61,7 +62,6 @@ const getAllUser = catchAsync(async (req, res) => {
 
 // change user status
 const changeUserStatus = catchAsync(async (req, res) => {
-  // console.log("request", req);
   const { userId } = req?.params;
   const { status } = req.body;
   const result = await userService.changeUserStatusIntoDB(userId, status);
