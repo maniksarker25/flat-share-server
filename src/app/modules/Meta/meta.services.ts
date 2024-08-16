@@ -12,9 +12,11 @@ const getMetaDataForProfile = async (user: JwtPayload) => {
       break;
     case UserRole.ADMIN:
       metaData = await getAdminMetaData(user);
+      break;
     default:
       throw new AppError(httpStatus.BAD_REQUEST, "Invalid user role");
   }
+  console.log(metaData);
   return metaData;
 };
 
