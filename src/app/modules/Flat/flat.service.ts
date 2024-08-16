@@ -25,7 +25,6 @@ const getFlatsFromDB = async (
   const convertStringToBoolean = convertStringParamsToBoolean(query);
   const { page, limit, skip } = calculatePagination(options);
   const { searchTerm, ...filterData } = convertStringToBoolean;
-  // console.log(filterData);
   filterData.totalBedrooms = Number(filterData.totalBedrooms);
   filterData.minPrice = Number(filterData.minPrice);
   filterData.maxPrice = Number(filterData.maxPrice);
@@ -86,7 +85,6 @@ const getFlatsFromDB = async (
     });
   }
   const whereConditions: Prisma.FlatWhereInput = { AND: andConditions };
-  console.dir(whereConditions, { depth: "infinity" });
   const result = await prisma.flat.findMany({
     where: whereConditions,
     skip,
